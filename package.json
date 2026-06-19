@@ -1,0 +1,17 @@
+{
+  "name": "nova-pasta",
+  "version": "1.0.0",
+  "description": "atividade de tarefas",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "author": "eu",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
