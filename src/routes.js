@@ -10,7 +10,28 @@ router.get('/todos', (req,res) => {
 })
 
 router.put('/todos', (req, res) => {
-    r
+    const { titulo, novoTitulo } = req.body;
+
+    for (let i = 0; i < todos.length; i++) {
+        if (titulo === todos[i].titulo) {
+            todos[i].titulo = novoTitulo;
+            return res.status(200).json(todos[i], { mensagem: "Informação atualizada!"})
+        } else {
+            return res.status(400).json({ mensagem: "Título não foi encontrado."})
+        }
+    }
+})
+
+router.delete('/todos', (req, res) => {
+    const { titulo } = req.body;
+    for (let i = 0; i < todos.length; i++) {
+        if (titulo === todos[i].titulo) {
+            todos.splice(i, 1)
+            return res.status(200).json({ mensagem: "Tarefa deletada com sucesso!"})
+        } else {
+            return res.status(400).json({ mensagem: "Algo está errado!"})
+        }
+    }
 })
 
 router.post('/todos', (req, res) => {
