@@ -1,5 +1,6 @@
 const express = require("express");
 const { todos } = require("./data/memory")
+const { autenticacaoMiddleware } = require("./auth")
 
 const router = express.Router()
 
@@ -9,7 +10,7 @@ router.get('/todos', (req,res) => {
     })
 })
 
-router.put('/todos', (req, res) => {
+router.put('/todos', autenticacaoMiddleware, (req, res) => {
     const { titulo, novoTitulo } = req.body;
 
     for (let i = 0; i < todos.length; i++) {
