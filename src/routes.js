@@ -1,16 +1,24 @@
 const express = require("express");
-const { todos } = require("./data/memory")
+const { todos } = require("./data/memory");
 const { autenticacaoMiddleware } = require("./auth")
+const { connectDB } = require("./database")
 
 const router = express.Router()
 
-router.get('/todos', (req,res) => {
+router.get('/todos', async (req,res) => {
+    const db = await connectDB();
+    const todos = await db.all('SELECT * FROM todos');
+
     return res.status(200).json ({
         tarefas: todos
     })
 })
 
-router.put('/todos', autenticacaoMiddleware, (req, res) => {
+router.put('/todos', autenticacaoMiddleware, async (req, res) => {
+
+    const db = await connectDB();
+    const result = await db.run('UPDATE todos SET titulo = ? WHERE titulo = ?', novoTitulo, titulo);
+    
     const { titulo, novoTitulo } = req.body;
 
     for (let i = 0; i < todos.length; i++) {
@@ -23,7 +31,11 @@ router.put('/todos', autenticacaoMiddleware, (req, res) => {
     }
 })
 
-router.delete('/todos', (req, res) => {
+router.delete('/todos', async (req, res) => {
+
+    const db = await connectDB();
+    const result = await db.run('DELETE FROM todos WHERE titulo = ?', titulo);
+
     const { titulo } = req.body;
     for (let i = 0; i < todos.length; i++) {
         if (titulo === todos[i].titulo) {
@@ -35,7 +47,11 @@ router.delete('/todos', (req, res) => {
     }
 })
 
-router.post('/todos', (req, res) => {
+router.post('/todos', async (req, res) => {
+    
+    const db = await connectDB();
+    const result = await db.run('INSERT INTO todos (titulo, descricao, feito) VALUES (?, ?, ?)', titulo, descricao, false);
+
     const { titulo, descricao } = req.body;
 
     if (!titulo) {
